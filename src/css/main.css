@@ -1,0 +1,32 @@
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+#fridge-container {
+    margin: 0 auto;
+    height: 810px;
+    padding: 80px 60px 160px 60px;
+
+    background-color: lightgray;
+    background-image: url('../img/fridge_1600_810.png');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#fridge-products-container {
+    /* background-color: red; */
+
+    width: 100%;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+}
+
+#fridge-products-container > .card {
+    height: fit-content;
+}
