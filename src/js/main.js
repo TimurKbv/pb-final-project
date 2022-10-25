@@ -43,6 +43,27 @@ const addProductVolInput = document.querySelector('#form-add-product-volume');
 const addProductExpDateInput = document.querySelector('#form-add-product-exp-date');
 // Referenz auf Button für Bestätigung des neuen Produkts
 const addProductSubmitBtn = document.querySelector('#btn-add-product');
+// Clean BUTTON
+const cleanButton = document.querySelector('#clean-fridge-btn');
+// Defrost BUTTON
+const defrostButton = document.querySelector('#remove-all-products-btn');
+// SORT BUTTON
+const sortButton = document.querySelector('#sort-products-by-exp-date-btn');
+// Fridge Capacity
+const fridgeCapacity = document.querySelector('#fridge-capacity-span');
+// Amount Products
+const amountProducts = document.querySelector('#products-amount-span');
+// Free capacity
+const freeCapacity = document.querySelector('#fridge-free-capacity-span');
+// Until tomorrow
+const untilTomorrow = document.querySelector('#products-until-tomorrow-span');
+// Expired Products
+const expiredProducts = document.querySelector('#products-until-tomorrow-span');
+// Smallest product
+const smallestProduct = document.querySelector('#smallest-product-span');
+// Biggest Product
+const biggestProduct = document.querySelector('#biggest-product-span');
+
 /* -------------------------------------- */
 
 
@@ -138,3 +159,152 @@ function createNewProductCard(productName, productVolume, productExpDate, isExpi
     // Gebe fertige Klasse zurück
     return card;
 }
+
+// Neue Kühlschrank
+let samsung = new Fridge(100, 'samsung');
+// FRIDGE CAPACITY
+fridgeCapacity.innerText = samsung.capacity;
+
+// Amount products
+
+
+
+
+
+// Produkte erstellen
+let eier = new Product('eier', 10, new Date('2022-11-03'));
+let tomaten = new Product('Tomaten', 15, new Date('2022-11-05'));
+let joghurt = new Product('Joghurt', 5, new Date('2022-10-05'));
+let quark = new Product('Quark', 10, new Date('2022-10-26'));
+// Produkte zufügen
+samsung.addProduct(eier);
+samsung.addProduct(joghurt)
+samsung.addProduct(tomaten);
+samsung.addProduct(quark);
+
+
+// Kühlschrank befüllen
+function fillFridge(fridge) {
+    
+    fridge.storage.forEach((prod) => {
+    
+        if (prod.expirationDate < new Date()) prod.isExpired = true;
+    
+        let date = prod.expirationDate.getDate() + '.' + prod.expirationDate.getMonth() + '.' + prod.expirationDate.getFullYear();
+        // Die erste Buchstaben Groß machen
+        let prodName = prod.name.charAt(0).toUpperCase() + prod.name.slice(1);
+        //Neue Card im Kühlschrankk erstellen
+        let newCard = createNewProductCard(prodName, prod.volume, date, prod.isExpired, function () {
+            fridgeProductsContainer.removeChild(newCard);
+        });
+        // Neue Card dem Kühlschrank adden
+        fridgeProductsContainer.appendChild(newCard);
+    });
+    
+}
+
+
+
+
+
+// Clean Fridge Expired Products
+function cleanFridge(fridge) {
+    fridge.deleteExpProducts()
+}
+// cleanFridge(samsung)
+cleanButton.addEventListener('click', function (evt) {
+    // Lösche alte cards 
+    fridgeProductsContainer.replaceChildren();
+    // Lösche abgelaufene Produkte
+    cleanFridge(samsung);  
+    // Neue Produkteliste zufügen
+    fillFridge(samsung); 
+});
+
+// DEFROST Kühlschrank
+defrostButton.addEventListener('click', function (evt) {
+   // Lösche alte cards 
+   fridgeProductsContainer.replaceChildren();
+});
+
+
+// SORTIERE
+
+sortButton.addEventListener('click', function (evt) {
+    fridgeProductsContainer.replaceChildren();
+    samsung.sortProducts();
+    fillFridge(samsung); 
+});
+
+
+
+
+
+// Button
+// function checkInput() {
+//     let inputCheck = false;
+
+    
+//     addProductNameInput.addEventListener('input', function (evt) {
+//         console.log(this.value);
+        
+//         if (this.value.length > 0) {
+//             inputCheck = true;
+//         } else inputCheck = false;
+//         console.log(inputCheck);
+//     });
+
+//     console.log(inputCheck);
+//     if (inputCheck) {
+//         return addProductSubmitBtn.disabled = false;
+//     } else  return addProductSubmitBtn.disabled = true;
+// }
+// checkInput()
+
+
+addProductSubmitBtn.disabled = true;
+
+addProductNameInput.addEventListener('input', function (evt) {
+    console.log(this.value);
+    if (this.value.length > 0) {
+        addProductSubmitBtn.disabled = false;
+    } else addProductSubmitBtn.disabled = true;
+});
+
+
+addProductSubmitBtn.addEventListener('click', function (evt) {
+    console.log(addProductExpDateInput.value);
+    let isExpired = false;
+
+    // DAtum von heute abgekürzt
+    let today = new Date().getDate() + '.' + new Date().getMonth() + '.' + new Date().getFullYear();
+    
+    // Wenn Produkt abgelaufen ist - wird true
+    if (addProductExpDateInput.value < today) isExpired = true;
+    console.log(isExpired);
+    // Die erste Buchstaben Groß machen
+    let prodName = addProductNameInput.value.charAt(0).toUpperCase() + addProductNameInput.value.slice(1);
+    //Neue Card im Kühlschrankk erstellen
+    let newCard = createNewProductCard(prodName, addProductVolInput.value, addProductExpDateInput.value, isExpired, function () {
+        fridgeProductsContainer.removeChild(newCard);
+    });
+    // Neue Card dem Kühlschrank adden
+    fridgeProductsContainer.appendChild(newCard);
+
+    evt.target.disabled = true;
+    addProductNameInput.value = '';
+    addProductVolInput.value = '';
+    addProductExpDateInput.value = '';
+});
+
+
+
+
+
+
+
+// BUTTON DISABLED / ENABLED
+
+
+
+fillFridge(samsung);

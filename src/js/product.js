@@ -5,8 +5,15 @@
     - Das Produktvolumen als Ganzzahl (Integer)
     - Das Ablaufsdatum des Produkts als Datum (Date)
 */
+
 class Product {
-    
+    constructor(name, volume, expirationDate){
+        this.name = name;
+        this.volume = volume;
+        this.expirationDate = expirationDate;
+    }
 }
+
+
 
 export default Product;

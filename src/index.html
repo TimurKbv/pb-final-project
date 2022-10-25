@@ -22,7 +22,7 @@
                 <div>
                     <label class="form-label">Fridge capacity 
                         <br>
-                        <span class="badge text-bg-primary" id="fridge-capacity-span">50</span>
+                        <span class="badge text-bg-primary" id="fridge-capacity-span"></span>
                     </label>
                 </div>
                 
@@ -80,13 +80,13 @@
                 <!-- Wird von Javascript befüllt -->
                 <!-- Beispiel Card. Sollte gelöscht werden -->
                 <div id="fridge-products-container">
-                    <div class="card">
+                    <!-- <div class="card">
                         <div class="card-body">
                           <h5 class="card-title">Brocolli <button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-utensils"></i></button></h5>
                           <h6 class="card-subtitle mb-2 text-muted">10.10.2022</h6>
                           <p class="card-text">10 VU</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -156,7 +156,7 @@
                     <!-- Eingabebereich für das Volumen des neuen Produkts -->
                     <div class="col-2">
                         <label for="form-add-product-volume" class="form-label">Product Volume</label>
-                        <input type="number" class="form-control" placeholder="Product Volume" id="form-add-product-volume">
+                        <input type="number" min="1" class="form-control" placeholder="Product Volume" id="form-add-product-volume">
                     </div>
 
                     <!-- Eingabebereich für das Ablaufdatum des neuen Produkts -->
@@ -170,7 +170,7 @@
                         <label for="btn-add-product" class="form-label">Confirm</label>
                         <button type="submit" class="btn btn-primary .mx-auto col-12" id="btn-add-product"
                             data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-title="Add product with give information to fridge"
+                            data-bs-title="Add product with give information to fridge" 
                         >Add</button>
                     </div>
                 </div>
