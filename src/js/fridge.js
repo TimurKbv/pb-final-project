@@ -22,6 +22,10 @@ import Product from "./product.js";
     - Eine Methode zum Entfernen aller abgelaufenen Produkte
     - Eine Methode zum Sortieren der Produkte nach Ablaufdatum
 */
+const ONE_DAY = 1000*60*60*24;
+let today = new Date().getTime();
+let tomorrow = today + (ONE_DAY); 
+
 class Fridge {
     // Datenbank
     storage = [
@@ -34,11 +38,11 @@ class Fridge {
     }
     // Freies Platz
     freeCapacity(){
-        return this.capacity;
+        return this.capacity - this.usedCapacity();
     }
     // Benutzte Platz
     usedCapacity(){
-        return this.storage.reduce((totalCapacity, product) => totalCapacity+=product.volume, 0);
+        return this.storage.reduce((usedCapacity, product) => usedCapacity+=product.volume, 0);
     }
     // Anzahl der Produkte
     totalProducts(){
@@ -46,93 +50,62 @@ class Fridge {
     }
     // Produkt mit kleinstem Volumen
     smallestVU(){
-         return  this.storage.sort((a, b) => a.volume - b.volume)[0].name;
+        if (this.storage.length === 0) {
+            return '-'
+        }
+         return  [...this.storage].sort((a, b) => a.volume - b.volume)[0].name;
     }
     // Produkt  mit größtem Volumen
     biggestVU(){
-        return this.storage.sort((a, b) => b.volume - a.volume)[0].name;
+        if (this.storage.length === 0) {
+            return '-'
+        }
+        return [...this.storage].sort((a, b) => b.volume - a.volume)[0].name;
     }
     // Produkte zufügen
     addProduct(product){
-        if (this.capacity > product.volume) {
-
+        if (this.freeCapacity() >= product.volume) {
             this.storage.push(product);
-            this.capacity -= product.volume;
         } else return `Not enougth capacity`;
     }
-
+    // Produkt löschen
     deleteProduct(productIndex){
         this.storage.splice(productIndex, 1);
         return `Product deleted!`
     }
-
+    // Alle Produkte löschen
     deleteAllProducts(){
         this.storage.splice(0);
         return `All Products removed`
     }
+    // Alle abgelaufene Produkte löschen
     deleteExpProducts(){
         let today = new Date();
         this.storage = this.storage.filter(produkt => produkt.expirationDate >= today);
         return `ExpProducts removed!`
     }
+    // Sortiere Produkte
     sortProducts(){
         this.storage.sort((a, b) => a.expirationDate - b.expirationDate);
         return `Sorted!`
     }
+    // Produkte die bis morgen noch ok sind
+    untilTomorrow(){
+        return this.storage.filter(prod => {
+            if (prod.expirationDate <  tomorrow && prod.expirationDate > today) {
+                return prod;
+            }
+        }).length
+    }
+    // Schlechte Produkte
+    expProducts(){
+        return this.storage.filter(prod => {
+            if (prod.expirationDate <  today) {
+                return prod;
+            }
+        }).length
+    }
 }
-
-
-
-
-
-
-// let samsung = new Fridge(100, 'samsung');
-
-// console.log(samsung.freeCapacity());
-
-// let eier = new Product('eier', 10, new Date('2022-11-03'));
-
-// let tomaten = new Product('Tomaten', 15, new Date('2022-11-05'));
-// let joghurt = new Product('Joghurt', 5, new Date('2022-10-05'));
-// samsung.addProduct(eier);
-
-// samsung.addProduct(tomaten);
-
-
-
-// console.log(samsung.totalProducts());
-
-// console.log(samsung.storage);
-
-// console.log(samsung.freeCapacity());
-
-// console.log(samsung.usedCapacity());
-
-// console.log(samsung.smallestVU());
-
-// console.log(samsung.biggestVU());
-
-// samsung.addProduct(joghurt);
-// // console.log(samsung.deleteAllProducts());
-
-// // console.log(samsung.storage);
-
-// // console.log(samsung.deleteExpProducts());
-
-// // console.log(samsung.storage);
-
-// console.log(samsung.freeCapacity());
-
-// console.log(samsung.totalProducts());
-
-
-// console.log(samsung.storage);
-
-// console.log(samsung.sortProducts());
-
-// console.log(samsung.usedCapacity());
-
-// console.log(samsung.capacity);
 
 
 export default Fridge;
