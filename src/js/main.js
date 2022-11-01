@@ -310,6 +310,11 @@ cleanButton.addEventListener("click", function (evt) {
 
 // DEFROST Kühlschrank
 defrostButton.addEventListener("click", function (evt) {
+  
+  samsung.storage.forEach(product => {
+  // Füge frische Produkte, vor  löschen, Einkaufsliste zu
+  einkaufsliste.addProducts(product);
+  })
   // Lösche alle Produkte von Datenbank
   samsung.deleteAllProducts();
   // Kühlschrank neu laden
